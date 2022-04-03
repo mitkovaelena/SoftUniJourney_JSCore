@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Library</title>
+    <script src="scripts/jquery-3.0.0.min.js" ></script>
+    <script src="scripts/script.js" ></script>
+
+    <link rel="stylesheet" type="text/css" href="style/site.css" />
+</head>
+<body>
+<header id="menu">
+ <a href="#" id="linkHome">Home</a>
+    <a href="#" id="linkLogin">Login</a>
+    <a href="#" id="linkRegister">Register</a>
+    <a href="#" id="linkListBooks">List Books</a>
+    <a href="#" id="linkCreateBook">Create Book</a>
+    <a href="#" id="linkLogout">Logout</a>
+</header>
+
+<main>
+    <section id="loadingBox">Loading...</section>
+    <section id="infoBox" onclick="$(this).fadeOut()">Info...</section>
+    <section id="errorBox" onclick="$(this).fadeOut()">Error...</section>
+
+    <section id="viewHome">
+    <h1>Welcome</h1>
+        Welcome to our book library!
+    </section>
+
+    <section id="viewLogin">
+        <h1>Please Login</h1>
+                    <form class="formLogin">
+                <div>Username:</div>
+                <input type="text" value placeholder="Enter Username" id="loginUsername" required/>
+                <div >Password:</div>
+                <input type="text" value placeholder="Enter Password" id="loginPassword" required/>
+                <br>
+                <input type="submit" id="buttonLogin" value="Login"/>
+                        <br>
+            </form>
+            <a class="form-link" href="#" onclick="showRegister()">Register here</a>
+    </section>
+
+    <section id="viewRegister">
+        <h1>Please Register here</h1>
+        <form class="formRegister">
+            <div>Username:</div>
+            <input type="text" value placeholder="Enter Username" id="regUsername" required/>
+            <div>Password:</div>
+            <input type="text" value placeholder="Enter Password" id="regPassword" required/>
+            <br>
+            <input type="submit" id="buttonRegister" value="Register"/>
+            <br>
+        </form>
+        <a class="form-link" href="#" onclick="showLogin()">Login here</a>
+    </section>
+
+    <section id="viewBooks">
+        <h1>Books</h1>
+        <div id="books"></div>
+    </section>
+
+    <section id="viewCreateBook" >
+        <h1>Create new book</h1>
+        <form class="formCreateBook">
+            <div >Title:</div>
+            <input type="text" value placeholder="Enter Title" id="bookTitle" required/>
+            <div>Author:</div>
+            <input type="text" value placeholder="Enter Author" id="bookAuthor" required/>
+            <div>Description:</div>
+            <textarea id="bookDesc" rows="10" required> </textarea>
+            <br>
+            <input type="submit" id="buttonCreateBook" value="Create Book"/>
+            <br>
+        </form>
+    </section>
+
+</main>
+
+<footer>
+    Books Library - Sample Project
+</footer>
+</body>
+</html>

@@ -1,0 +1,88 @@
+#menu{
+    background: mistyrose;
+    height: 10px;
+    text-align: center;
+    padding: 30px;
+    color: darkviolet;
+    font-size: 20pt;
+    font-family: Century;
+    line-height: 1.5px;
+    border-radius: 3px;
+}
+input{
+    background: mistyrose;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+#menu a{
+    display: inline;
+    text-decoration: none;
+    padding: 5px 10px;
+   border-radius: 5px;
+}
+
+#menu a:hover {
+background: rosybrown;
+}
+
+main > section{
+   display: none;
+    padding: 20px;
+    text-align: center;
+
+}
+
+section h1{
+    color: rosybrown;
+    margin: 10px 0;
+    font-size: 20pt;
+}
+
+table th{
+    background: lightgrey;
+    padding:10px;
+
+}
+
+table td {
+    background: mistyrose;
+    padding: 5px 10px;
+    word-break:break-all;
+    text-align:left;
+}
+
+.commentsClass{
+    background: white;
+}
+
+.commentsClass input{
+    background: white;
+}
+
+#infoBox, #loadingBox, #errorBox{
+    width: 80%;
+    margin: 10px auto;
+    color: whitesmoke;
+    text-align: center;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+#loadingBox{
+     background: cornflowerblue;
+ }
+#infoBox{
+    background: greenyellow;
+}
+#errorBox{
+    background: lightsalmon;
+}
+
+footer{
+    text-align: center;
+    color: rosybrown;
+    margin: 10px 0;
+    font-size: 13pt;
+    clear: both;
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Messenger</title>
+    <style>
+        label { display: inline-block; width: 5em; }
+        #author, #content { width: 30em; }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+<div id="main">
+    <textarea id="messages" cols="80" rows="12" disabled="true"></textarea>
+    <div id="controls">
+        <label for="author">Name: </label><input id="author" type="text"><br>
+        <label for="content">Message: </label><input id="content" type="text">
+        <input id="submit" type="button" value="Send">
+        <input id="refresh" type="button" value="Refresh">
+    </div>
+</div>
+
+<script>
+    $(function attachEvents(){
+        $("#submit").click(submit)
+        $("#refresh").click(refresh)
+
+        function refresh() {
+            $("#messages").empty();
+            $.get("https://messenger-a9288.firebaseio.com/messenger.json")
+                    .then(displayMessages)
+                    .catch(displayError)
+        }
+
+        function submit() {
+            let author = $("#author").val()
+            let content =$("#content").val()
+            let timestamp = Date.now()
+            let message = {
+                author: author,
+                content: content,
+                timestamp: timestamp
+            }
+
+            let createRequest = {
+                method : "POST",
+                url: "https://messenger-a9288.firebaseio.com/messenger.json",
+                data: JSON.stringify(message)              //JSON !!!!
+            }
+            $.ajax(createRequest).then(refresh).catch(displayError)
+            $('#author').val('');
+            $('#content').val('');
+        }
+
+        function displayMessages(messges) {
+            for(let key of Object.keys(messges)) {
+                let m = messges[key]
+                let text = $("#messages").text() + m.author + ": " + m.content +"\n"
+                let textArea = $("#messages").text(text)
+            }
+        }
+
+        function displayError() {
+            $("<textarea>").text("Error")
+        }
+
+    });
+</script>
+
+</body>
+</html>

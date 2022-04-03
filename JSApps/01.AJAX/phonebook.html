@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <title>Phonebook</title>
+</head>
+<body>
+<h1>Phonebook</h1>
+<ul id="phonebook"></ul>
+<button id="btnLoad">Load</button>
+
+<h2>Create Contact</h2>
+Person: <input type="text" id="person" />
+<br>
+Phone: <input type="text" id="phone" />
+<br>
+<button id="btnCreate">Create</button>
+
+<script>
+    $(function () {
+        $("#btnLoad").click(loadContacts)
+        $("#btnCreate").click(createContact)
+
+
+        function loadContacts() {
+            $("#phonebook").empty();
+            $.get("https://eli1-5ef2d.firebaseio.com/phonebook.json")
+                    .then(displayContacts)
+                    .catch(displayError)
+        }
+
+        function displayContacts(contacts) {
+            for(let key of Object.keys(contacts)) {
+                let contact  = contacts[key];
+                let text = contact.name + " " + contact.phone + " "
+                let delBtn = $("<button>").text("[Delete]")
+                delBtn.click(function(){
+                    deleteContact(key)
+                })
+                let li = $("<li>").text(text)
+                li.append(delBtn)
+                $("#phonebook").append(li)
+
+            }
+        }
+
+        function displayError() {
+            $("#phonebook").html("<li>Error<\li>")
+        }
+
+        function deleteContact(key) {
+            let delRequest = {
+                method : "DELETE",
+                url: "https://eli1-5ef2d.firebaseio.com/phonebook/" + key + ".json"
+            }
+            $.ajax(delRequest).then(loadContacts).catch(displayError)
+        }
+
+        function createContact() {
+            let name = $("#person").val()
+            let phone =$("#phone").val()
+            let contact = {
+                name: name,
+                phone: phone
+            }
+            let createRequest = {
+                method : "POST",
+                url: "https://eli1-5ef2d.firebaseio.com/phonebook.json",
+                data: JSON.stringify(contact)              //JSON !!!!
+            }
+            $.ajax(createRequest).then(loadContacts).catch(displayError)
+            $('#person').val('');
+            $('#phone').val('');
+        }
+    })
+</script>
+</body>
+</html>

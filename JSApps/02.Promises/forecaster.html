@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forecatser</title>
+    <style>
+        #content { width: 400px; }
+        #request { text-align: center; }
+        .bl { width: 300px; }
+        #current { text-align: center; font-size: 2em; }
+        #upcoming { text-align: center; }
+        .condition { text-align: left; display: inline-block; }
+        .symbol { font-size: 4em; display: inline-block; }
+        .forecast-data { display: block; }
+        .upcoming { display: inline-block; margin: 1.5em; }
+        .label { margin-top: 1em; font-size: 1.5em; background-color: aquamarine; font-weight: 400; }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+<div id="content">
+    <div id="request">
+        <input id="location" class='bl' type="text">
+        <input id="submit" class="bl" type="button" value="Get Weather">
+    </div>
+    <div id="forecast" style="display:none">
+        <div id="current">
+            <div class="label">Current conditions</div>
+        </div>
+        <div id="upcoming">
+            <div class="label">Three-day forecast</div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function attachEvents(){
+        $("#submit").click(forecast)
+        
+        function forecast() {
+            $.get("https://judgetests.firebaseio.com/locations.json")
+                    .then(findForecast)
+                    .catch(displayError);
+
+        }
+
+        function findForecast(locations) {
+            let location = $("#location").val()
+            let code = "";
+            for (let l of locations) {
+                if(l.name == location){
+                    code = l.code
+                    $.get(`https://judgetests.firebaseio.com/forecast/today/${code}.json`)
+                            .then(renderForecast)
+                            .catch(displayError);
+                    $.get(`https://judgetests.firebaseio.com/forecast/upcoming/${code}.json`)
+                           .then(renderUpcoming)
+                           .catch(displayError);
+                    break;
+                }
+            }
+            if(code == "") displayError()
+        }
+        
+        function renderForecast(f) {
+            $("#forecast").css("display", "inline")
+            let spanCS = $("<span>").addClass("condition symbol").html(getWeatherIcon(f.forecast.condition))
+            let spanC = $("<span>").addClass("condition")
+            let spanFD1 = $("<span>").addClass("forecast-data").html(f.name)
+            let spanFD2 = $("<span>").addClass("forecast-data").html(`${f.forecast.low}&#176;/${f.forecast.high}&#176;`)
+            let spanFD3 = $("<span>").addClass("forecast-data").html(f.forecast.condition)
+            $("#current").append(spanCS,spanC)
+            spanC.append(spanFD1,spanFD2,spanFD3)
+        }
+
+        function renderUpcoming(threeDays){
+           $("#forecast").css("display", "inline")
+            for(let day of threeDays.forecast){
+                let spanU = $("<span>").addClass("upcoming")
+                let spanSymbol = $("<span>").addClass("symbol").html(getWeatherIcon(day.condition))
+                let spanFD1 = $("<span>").addClass("forecast-data").html(`${day.low}&#176;/${day.high}&#176;`)
+                let spanFD2 = $("<span>").addClass("forecast-data").html(day.condition)
+                $("#upcoming").append(spanU)
+                spanU.append(spanSymbol,spanFD1,spanFD2)
+            }
+
+        }
+
+        function displayError(error) {
+            let div = $("<div>").text("Error")
+           $("#forecast").css("display", "inline").empty().append(div)
+        }
+
+        function getWeatherIcon(condition) {
+            return {
+                'Sunny': '&#x2600;',
+                'Partly sunny': '&#x26C5;',
+                'Overcast': '&#x2601;',
+                'Rain': '&#x2614;'
+            }[condition];
+        }
+
+    });
+</script>
+</body>
+</html>
