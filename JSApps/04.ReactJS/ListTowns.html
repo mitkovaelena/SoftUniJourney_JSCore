@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Town</title>
+    <script src="https://unpkg.com/react/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-standalone"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+</head>
+<body>
+<div id="root"></div>
+</body>
+<script type="text/babel">
+    function listTowns(selector) {
+
+        let Form = React.createClass({
+            handleSubmit: function (event) {
+                event.preventDefault();
+                this.props.action(event.target.parentNode[0]);   //zadeistva action-a na Form ???
+            },
+            render: function () {
+                return (
+                        <form>
+                            <input type="text"/>
+                            <input type="submit" onClick={this.handleSubmit}/>
+                        </form>
+                );
+            }
+        });
+
+        let App = React.createClass ({
+            getInitialState: function () {
+                let towns = [];
+                return {towns};
+            },
+            updateTowns: function (input) {
+                if (input.value.length > 0)
+                    this.setState({towns: input.value.split(', ')});
+                else
+                    this.setState({towns: []});
+            },
+
+            render: function () {
+                let items = this.state.towns.map(function (town, i) {
+                    return <li key={i}>{town}</li>
+                });
+                return (
+                        <div>
+                            <Form action={this.updateTowns}/>
+                            <ul>{items}</ul>
+                        </div>
+                )}
+        })
+
+        let component =  <App/>
+
+        ReactDOM.render(
+                component,
+                document.getElementById(selector)
+        );
+    }
+    listTowns("root")
+</script>
+</html>

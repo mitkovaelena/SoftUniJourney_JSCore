@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/react/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-standalone"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+</div>
+
+<script type="text/babel">
+
+    class Person extends React.Component {
+        render() {
+            return <p>Hello, {this.props.name} ({this.props.age})!</p>
+        }
+    }
+
+    let Navi = React.createClass ({
+        render: function () {
+            return <p>Navigation!</p>
+        }
+    })
+
+    let Counter = React.createClass ({
+        getInitialState: function () {
+            return {
+                count: this.props.start
+            }
+        },
+        increase: function () {
+            this.setState({
+                        count: Number(this.state.count)+1
+            })
+        },
+        decrease: function () {
+            this.setState({
+                count: Number(this.state.count)-1
+            })
+        },
+        render: function () {
+
+            return (
+                    <div>
+                    <p>count: {this.state.count}</p>
+                    <button type="button" onClick={this.increase}>+</button>
+                    <button type="button" onClick={this.decrease}>-</button>
+
+                    </div>
+            )
+
+        }
+    })
+
+    let List = React.createClass({
+        render: function () {
+            return (<ul>
+                {
+                    this.props.items.map((item, i) =>(<li key = {i}>{item}</li>)
+                    )}
+            </ul>)
+        }
+    })
+
+    let towns = ["hello", "eli", "sofia"];
+
+    let Table = React.createClass({
+        render: function() {
+            let titles =
+                    this.props.columns.map(function(column, i) {
+                        return <th key={i}>{column}</th>;
+                    });
+            let rows = this.props.rows.map(function(row, r) {
+                return <tr key={r}>{row.map(function(col, c){
+                    return <td key={c}>{col}</td>
+                })}</tr>;
+            });
+            return (
+                    <table>
+                        <thead><tr>{titles}</tr></thead>
+                        <tbody>{rows}</tbody>
+                    </table>
+            )
+        }
+    });
+    let books = [["JS Programming Basics","Bay Ivan"],
+        ["PHP","Dedo Mraz"], ["React.js","Kaka Mara"]];
+
+
+    let app = <div>
+        <Navi/>
+        <Person name = "Eli" age = "5"/>
+        <Person name = "Elena" age = "20"/>
+        <Counter start = "5"/>
+        <Counter start = "-5"/>
+        <List items={towns}/>
+        <Table columns={["Title", "Author"]} rows={books} />
+    </div>
+
+    ReactDOM.render(app,                    //samo 1
+            $('#app')[0]);
+
+</script>
+
+</body>
+</html>
