@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendar</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+            crossorigin="anonymous"></script>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            padding: 0.25em;
+            margin: 0;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        th, td {
+            width: 2.5em;
+        }
+        .today {
+            background-color: orange;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div id="content">
+</div>
+<script>
+    window.onload = function(){
+        calendar([15,1,2017]);
+        
+        function calendar([d,m,y]) {
+            let html ;
+
+            let month=new Array(12);
+            month[0]="January";
+            month[1]="February";
+            month[2]="March";
+            month[3]="April";
+            month[4]="May";
+            month[5]="June";
+            month[6]="July";
+            month[7]="August";
+            month[8]="September";
+            month[9]="October";
+            month[10]="November";
+            month[11]="December";
+
+            html =('<table>\n')
+            html +="<caption>"+month[m-1]+ " "+ y +"</caption>\n";
+            html +=('<tbody><tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>\n')
+
+            let date = new Date(y, m - 1, d);
+            let oneDay = 24 * 60 * 60 * 1000
+            let firstDay = new Date(y,m-1,1);
+            let nextMonth = new Date(y,m,1)
+
+            let dayOfWeek = firstDay.getDay();
+
+            if(dayOfWeek == 0) dayOfWeek = 6;
+            else dayOfWeek--;
+
+            let prevMonth= new Date(firstDay.getTime()-oneDay)
+            let lastDay= new Date(nextMonth.getTime()-oneDay)
+            let today = date.getDate();
+
+            let startDay = prevMonth.getDate()-dayOfWeek
+            let lastDayCurrMonth = lastDay.getDate();
+            let dayOfWeekLast = lastDay.getDay();
+            if(dayOfWeekLast == 0) dayOfWeekLast = 6;
+            else dayOfWeekLast--;
+
+            html +=("  <tr>")
+            for (let j = 0; j < dayOfWeek; j++) {
+                html +=(`<td class="prev-month"></td>`)
+            }
+            let i = 1;
+            for (let j = 0; j < 7-dayOfWeek; j++) {
+                if(i == today)  {
+                    html +=(`<td class="today">${i++}</td>`);
+                    continue;
+                }
+                html +=(`<td>${i++}</td>`)
+            }
+            html +=("</tr>\n");
+            html +=("<tr>");
+            let currI = i;
+            for (let j = 0; j <= lastDayCurrMonth-currI; j++) {
+                if (i == today) {
+                    html += (`<td class="today">${i++}</td>`);
+                }
+                else
+                    html += (`<td>${i++}</td>`)
+                if ((j + 1) % 7 == 0) {
+                    html += ("</tr>\n");
+                    if (j != lastDayCurrMonth - currI) html += ("<tr>");
+                }
+            }
+
+            i=1;
+            for (let j = dayOfWeekLast; j < 6; j++) {
+                html +=(`<td class="next-month"></td>`)
+            }
+            if(dayOfWeekLast < 6) html +=("</tr>\n");
+            html +=('</tbody></table>')
+            $("#content").append(html)
+        }
+    }
+</script>
+</body>
+</html>

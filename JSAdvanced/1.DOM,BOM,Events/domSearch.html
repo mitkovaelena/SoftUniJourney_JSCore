@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM Search</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <style>
+        .add-controls, .search-controls {
+            width: 20em;
+            height: 2em;
+        }
+        input {
+            position: absolute;
+            left:6em;
+        }
+        .button {
+            background-color: darkgrey;
+            color: white;
+            font-weight: bold;
+            position: absolute;
+            left: 15em;
+            border: 1px solid black;
+            padding: 0 5px 0 5px;
+        }
+        .result-controls .button {
+            position: relative;
+            left: 0;
+            font-size: 50%;
+            margin-right:1em;
+            padding: 0;
+            bottom: 3px;
+        }
+        li {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+<div id="content"></div>
+<script>
+    domSearch("div",true);
+    
+    function domSearch(selector, caseSensitive) {
+
+        let content = document.querySelector(selector)
+        content.classList.add("items-control");
+        let addControls = document.createElement('div')
+        addControls.classList.add("add-controls")
+        let label = document.createElement('label');
+        label.textContent = "Enter text: "
+        let input = document.createElement('input');
+        label.appendChild(input)
+        addControls.appendChild(label)
+        let button = document.createElement('a')
+        button.classList.add('button')
+        button.style.display = "inline-block";
+        button.textContent = "Add"
+        button.addEventListener('click',function(){add(input.value) })
+        addControls.appendChild(button)
+        content.appendChild(addControls)
+
+        let searchControls = document.createElement('div')
+        searchControls.classList.add("search-controls")
+        let label1 = document.createElement('label');
+        label1.textContent = "Search:"
+        let input1 = document.createElement('input');
+        label1.appendChild(input1)
+        input1.addEventListener('keypress',function(key){search(key.charCode,caseSensitive) })
+        searchControls.appendChild(label1)
+        content.appendChild(searchControls)
+
+        let resultControls = document.createElement('div')
+        resultControls.classList.add("result-controls")
+        let ul = document.createElement('ul');
+        ul.classList.add("items-list")
+        content.appendChild(resultControls)
+        add("Element 1")
+        add("Element 2")
+        add("Another element")
+        add("Item 1")
+        add("Item 2")
+        add("List Item")
+
+
+        function add(name){
+            let li = document.createElement('li');
+            li.classList.add("list-item")
+            let button1 = document.createElement('a')
+            button1.classList.add('button')
+            button1.textContent = "X"
+            button1.addEventListener('click',function(){del(this) })
+            let strong = document.createElement("strong")
+            strong.textContent = name;
+            li.appendChild(button1)
+            li.appendChild(strong)
+            resultControls.appendChild(li)
+            input.value = ""
+        }
+
+        function del(th) {
+            console.log(th)
+            let but = th;
+            let listItem = but.parentNode
+            but.parentNode.parentNode.removeChild(listItem)
+        }
+
+
+        function search(key, caseSensitive){
+            let word = input1.value+String.fromCharCode(key)
+       for(let l of document.getElementsByClassName("list-item")){
+           let lText = l.textContent;
+           if(!caseSensitive){
+              lText = lText.toLowerCase();
+               word = word.toLowerCase()
+           }
+           if(lText.indexOf(word)<0){
+               l.style.display="none"
+           }
+           else{
+               l.style.display="block"
+           }
+       }
+        }
+
+    }
+</script>
+</body>
+</html>

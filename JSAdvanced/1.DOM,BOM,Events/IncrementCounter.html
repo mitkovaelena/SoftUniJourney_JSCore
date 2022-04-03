@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Increment Counter</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="wrapper">
+</div>
+<script>
+    window.onload = function(){
+        increment(".wrapper");
+        
+        function increment(selector) {
+            let content = document.querySelector(selector)
+            let counter = document.createElement('textarea')
+            counter.classList.add("counter")
+            counter.value = 0
+            counter.disabled = "true"
+            content.appendChild(counter)
+            let btn = document.createElement('button')
+            btn.classList.add("btn")
+            btn.id="incrementBtn"
+            btn.textContent = "Increment"
+            content.appendChild(btn)
+            btn.addEventListener('click',function(){incrementValue() })
+            let btn1 = document.createElement('button')
+            btn1.classList.add("btn")
+            btn1.id="addBtn"
+            btn1.textContent = "Add"
+            content.appendChild(btn1)
+            btn1.addEventListener('click',function(){add() })
+            let ul = document.createElement('ul')
+            ul.classList.add("results")
+            content.appendChild(ul)
+
+            function incrementValue() {
+                counter.value = Number(counter.value)+1;
+            }
+            function add() {
+               let li = document.createElement("li")
+                li.textContent = counter.value;
+                ul.appendChild(li)
+            }
+        }
+    }
+</script>
+</body>
+</html>

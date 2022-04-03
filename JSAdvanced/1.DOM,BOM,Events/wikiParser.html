@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wiki Parser</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div>
+    <p id="wiki">
+        =Document title=
+        ==First segment==
+        '''bold 1''' word ''italics 1'' '''bold2'''
+        [[hyper first]] '''Bold three''' ''italics2'''
+        word [[hyper2]] [[hyperlink2|with Label]]
+        ==Second segment==
+        ===Third segment===
+        word '''word'''[[pipe|bomb]]
+    </p>
+</div>
+<script>
+    window.onload = function(){
+        wikiParser('#wiki');
+
+        function wikiParser(selector) {
+            let content = document.querySelector(selector)
+            let text = content.textContent;
+
+            let regex2 = /'''[A-Za-z0-9. ]*'''/g;
+            let match2
+            while (match2 = regex2.exec(text))
+            {
+                let newText2 = match2[0].replace("'''", "<b>")
+                newText2 = newText2.replace("'''", "</b>")
+                text = text.replace(match2[0], newText2)
+
+            }
+
+            let regex1 = /''[A-Za-z0-9. ]*''/g;
+            let match1
+            while (match1 = regex1.exec(text))
+            {
+               let newText1 = match1[0].replace("''", "<i>")
+                newText1 = newText1.replace("''", "</i>")
+                text = text.replace(match1[0], newText1)
+
+            }
+
+            let regex5 = /\=\=\=[A-Za-z0-9. ]*\=\=\=/g;
+            let match5
+            while (match5 = regex5.exec(text))
+            {
+                let newText5 = match5[0].replace("===", "<h3>")
+                newText5 = newText5.replace("===", "</h3>")
+                text = text.replace(match5[0], newText5)
+
+            }
+
+            let regex4 = /\=\=[A-Za-z0-9. ]*\=\=/g;
+            let match4
+            while (match4 = regex4.exec(text))
+            {
+                let newText4 = match4[0].replace("==", "<h2>")
+                newText4 = newText4.replace("==", "</h2>")
+                text = text.replace(match4[0], newText4)
+
+            }
+
+            let regex3 = /\=[A-Za-z0-9. ]*\=/g;
+            let match3
+            while (match3 = regex3.exec(text))
+            {
+                let newText3 = match3[0].replace("=", "<h1>")
+                newText3 = newText3.replace("=", "</h1>")
+                text = text.replace(match3[0], newText3)
+
+            }
+
+            let regex6 = /\[\[[A-Za-z0-9. ]*\]\]/g;
+            let match6
+            while (match6 = regex6.exec(text))
+            {
+                let link = match6[0].replace("[[", "").replace("]]", "")
+                let newText6 = '<a href="/wiki/'+ link + '">'+ link+'</a>'
+                text = text.replace(match6[0], newText6)
+
+            }
+
+            let regex7 = /\[\[[A-Za-z0-9. \|]*\]\]/g;
+            let match7
+            while (match7 = regex7.exec(text))
+            {
+                let linkText = match7[0].replace("[[", "").replace("]]", "")
+                let [link,textAfter] = linkText.split("|")
+                let newText7 = '<a href="/wiki/'+ link + '">'+ textAfter+'</a>'
+                text = text.replace(match7[0], newText7)
+                console.log(text)
+            }
+
+            content.innerHTML = text
+        }
+    }
+</script>
+</body>
+</html>
