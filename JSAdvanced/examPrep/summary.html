@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+            crossorigin="anonymous"></script>
+    <title>Title</title>
+</head>
+<body>
+<div class="holder">
+    <input type="button" id="generate" value="Generate Summary"/>
+    <div id="content">
+        <p><strong>Important text. </strong>Not too important. <strong>Also useful info.</strong></p>
+    </div>
+</div>
+<script>
+    window.onload = function () {
+        summary("#generate")
+
+        function summary(selector) {
+            $(selector).on("click", buttonClicked)
+
+            function buttonClicked() {
+                let items = $("#content strong")
+                let div = $("<div>").attr('id', "summary")
+                let h2 = $("<h2>").text("Summary")
+                let textP = "";
+                for (let i = 0; i < items.length; i++) {
+                    textP += items[i].textContent
+                }
+                let p = $("<p>").text(textP)
+                div.append(h2);
+                div.append(p);
+                $("#content").append(div)
+
+            }
+        }
+    }
+</script>
+</body>
+</html>
